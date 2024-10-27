@@ -1,0 +1,11 @@
+services:
+  tpch-postgres:
+    build: .
+    privileged: true
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./results.txt:/tmp/results.txt
