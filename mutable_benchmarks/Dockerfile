@@ -72,8 +72,6 @@ RUN chmod +x cmake-3.30.5-linux-x86_64.sh
 RUN bash cmake-3.30.5-linux-x86_64.sh --skip-license
 RUN ln -sf /opt/bin/* /usr/local/bin/
 
-# everything above this takes long so don't edit there
-# ---------------------------------------------------------------------------------
 WORKDIR /mutable
 RUN mkdir build
 RUN mkdir build/release
@@ -87,5 +85,15 @@ RUN cmake -S . -B build/release \
   -DENABLE_SANITY_FIELDS=ON \
   -DWITH_V8=ON
 RUN cmake --build build/release
+
+# everything above this takes long so don't edit there
+# ---------------------------------------------------------------------------------
+
+WORKDIR / 
+RUN wget https://github.com/duckdb/duckdb/releases/download/v1.1.2/duckdb_cli-linux-amd64.zip
+RUN apt-get install -y zip
+RUN unzip duckdb_cli-linux-amd64.zip
+RUN cp duckdb /mutable/benchmark/database_connectors/
+
 
 CMD ["tail", "-f", "/dev/null"]
