@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  mutable_bench:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./output:/output
+
