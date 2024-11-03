@@ -95,5 +95,35 @@ RUN apt-get install -y zip
 RUN unzip duckdb_cli-linux-amd64.zip
 RUN cp duckdb /mutable/benchmark/database_connectors/
 
+# install postgresql
 
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+RUN apt update -y
+RUN apt install -y postgresql-17
+RUN systemctl enable postgresql
+
+RUN mkdir -p /var/lib/postgresql/data && chown -R postgres:postgres /var/lib/postgresql
+USER postgres
+RUN /usr/lib/postgresql/17/bin/initdb -D /var/lib/postgresql/data
+RUN echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf
+
+USER root
+
+WORKDIR /mutable
+RUN apt install -y pipenv
+RUN pip install --upgrade pipenv
+RUN pipenv --clear
+RUN apt-get install -y graphviz graphviz-dev
+RUN pipenv run pip install --global-option=build_ext \
+                       --global-option="-I/usr/include/graphviz" \
+                       --global-option="-L/usr/lib/graphviz" \
+                       pygraphviz
+RUN apt-get install -y libpq-dev
+RUN pipenv install
+
+
+
+# CMD ["/usr/lib/postgresql/17/bin/pg_ctl", "-D", "/var/lib/postgresql/data", "-l", "/var/lib/postgresql/data/logfile", "start"]
 CMD ["tail", "-f", "/dev/null"]
+
