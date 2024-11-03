@@ -2,11 +2,21 @@
 2. Do docker compose up 
 3. With a different terminal do  
 
-```
+```sh
 docker exec -it mutable_benchmarks-mutable_bench-1 /bin/bash
+# this is usually already running for some reason so good chance you don't need this
 su - postgres
 /usr/lib/postgresql/17/bin/pg_ctl -D /var/lib/postgresql/data -l /var/lib/postgresql/data/logfile start
 logout
+# now we need to generate tpc-h data. I'm not going to specify how that's 
+# done here... I plan on moving it inside the Dockerfile
+
+# once you're in you should be inside the /mutable folder
+
+# you can run this for help
+pipenv run benchmark/Benchmark.py --help
+# now I run 
+pipenv run benchmark/Benchmark.py benchmark/tpc-h/ --output benchmark_result.csv --pgsql
 ```
 ```
 ```
