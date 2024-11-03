@@ -8,7 +8,5 @@ su - postgres
 /usr/lib/postgresql/17/bin/pg_ctl -D /var/lib/postgresql/data -l /var/lib/postgresql/data/logfile start
 logout
 ```
-
-Now postgresql should be running
 ```
 ```
