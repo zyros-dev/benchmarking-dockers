@@ -50,4 +50,6 @@ RUN echo "-f https://www.lingo-db.com/dev-dependencies/" > requirements.txt && \
 
 RUN apt-get update && apt-get install -y llvm
 
-CMD ["sh", "-c", "make build-release"]
+RUN python3 -m pip install -r requirements.txt
+
+CMD ["sh", "-c", "make run-benchmark"]
